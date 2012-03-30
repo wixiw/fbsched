@@ -85,7 +85,7 @@ orocos_install_headers( fbsched.hpp ) # ...you may add multiple header files
 # Creates a typekit library libfbsched-types-<target>.so
 # and installs in the directory lib/orocos/fbsched/types/
 #
-orocos_typegen_headers(fbsched-types.hpp) # ...you may add multiple header files
+# orocos_typegen_headers(fbsched-types.hpp) # ...you may add multiple header files
 #
 # You may only have *ONE* orocos_typegen_headers statement !
 

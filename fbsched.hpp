@@ -17,14 +17,13 @@ public:
 	FBSched(std::string const& name);
 	
 private:
-	bool configureHook();
 	bool startHook();
 	void updateHook();
-	void stopHook();
 	void cleanupHook();
 
-	std::vector<std::string> order;
+	std::vector<std::string> sched_order;
 	std::vector<RTT::TaskContext*> sched_list;
+	RTT::InputPort<int> trigger;
 };
 
 #endif

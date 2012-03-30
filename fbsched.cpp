@@ -23,8 +23,9 @@ bool contains(std::vector<std::string> &sv, const std::string &s)
 FBSched::FBSched(std::string const& name)
 	: TaskContext(name)
 {
-	this->addProperty("sched_order", order).doc("Partial order in which peers are \
-						     executed. Unmentioned peers come last.");
+	this->addProperty("sched_order", sched_order).doc("Partial order in which peers are executed. Unmentioned peers come last.");
+
+	this->addEventPort("trigger", trigger).doc("Event port for triggering a function block update cycle. Value is ignored.");
 }
 
 bool FBSched::startHook()
@@ -36,8 +37,8 @@ bool FBSched::startHook()
 	std::vector<std::string> peers = this->getPeerList();
 
 	// first store all peers mentioned in sched_order in sched_list
-	for(it=order.begin(); it<order.end(); it++) {
-		if(!(tc_tmp=this->getPeer(*it))==0) {
+	for(it=sched_order.begin(); it<sched_order.end(); it++) {
+		if((tc_tmp=this->getPeer(*it))==0) {
 			Logger::log(Logger::Error) << "FBSched error: component '" << *it
 						   << "'in sched_order is not a peer of us."
 						   << endlog();
@@ -47,16 +48,32 @@ bool FBSched::startHook()
 	}
 
 	for(it=peers.begin(); it<peers.end(); it++) {
-		if (!contains(order, *it)) { // current peer not mentioned in order
-			if(!(tc_tmp=this->getPeer(*it))==0) {
+		if (!contains(sched_order, *it)) { // current peer not mentioned in order
+			if((tc_tmp=this->getPeer(*it))==0) {
 				Logger::log(Logger::Error)
-					<< "FBSched error: failed to getPeer '" << *it << endlog();
+					<< "FBSched error: failed to getPeer '" << *it << "'" << endlog();
 				goto out_fail;
 			}
 			sched_list.push_back(tc_tmp);
 		}
 	}
-	/* yeah! */
+
+	/* catch silly misconfigurations */
+	if (sched_list.size() == 0) {
+		Logger::log(Logger::Error) << "FBSched error: refusing to start with zero peers to trigger"
+					   << endlog();
+		goto out_fail;
+	}
+
+	/* everythink Ok! */
+	Logger::log(Logger::Info) << "FBSched: running " << sched_list.size() 
+				  << " peers in the following order:";
+	
+	for(unsigned int i=0; i<sched_list.size(); i++)
+		Logger::log(Logger::Info) << " " << sched_list[i]->getName();
+
+	Logger::log(Logger::Info) << endlog();
+		
 	return true;
 
  out_fail:
@@ -66,8 +83,8 @@ bool FBSched::startHook()
 
 void FBSched::updateHook()
 {
-	for(unsigned int i=0; i<=sched_list.size(); i++) {
-		if ( !sched_list[i]->update() ) {
+	for(unsigned int i=0; i<sched_list.size(); i++) {
+		if (!sched_list[i]->update()) {
 			Logger::log(Logger::Error)
 				<< "FBSched error: failed to trigger component #" << i
 				<< " '" << sched_list[i]->getName() << "'" << endlog();
