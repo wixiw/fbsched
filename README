@@ -36,3 +36,9 @@ Future work
 
 It would be nice to extend the component (configurably) measure the
 min/avg/max duration of each slave and the total execution time.
+
+
+License
+-------
+
+Dual LGPL/BSD
