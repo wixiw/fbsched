@@ -14,7 +14,7 @@
  * Note that there are restrictions. Take a look at the
  * Orocos typekit plugin manuals and the typegen documentation.
  */
-struct FbschedData
+struct FBSchedData
 {
     /** Contains a sequence of doubles. */
     std::vector<double> samples;

@@ -41,7 +41,7 @@ include(${OROCOS-RTT_USE_FILE_PATH}/UseOROCOS-RTT.cmake)
 # Creates a component library libfbsched-<target>.so
 # and installs in the directory lib/orocos/fbsched/
 #
-orocos_component(fbsched fbsched-component.hpp fbsched-component.cpp) # ...you may add multiple source files
+orocos_component(fbsched fbsched.hpp fbsched.cpp) # ...you may add multiple source files
 #
 # You may add multiple orocos_component statements.
 
@@ -50,7 +50,7 @@ orocos_component(fbsched fbsched-component.hpp fbsched-component.cpp) # ...you m
 #
 # Installs in the include/orocos/fbsched/ directory
 #
-orocos_install_headers( fbsched-component.hpp ) # ...you may add multiple header files
+orocos_install_headers( fbsched.hpp ) # ...you may add multiple header files
 #
 # You may add multiple orocos_install_headers statements.
 
@@ -63,7 +63,7 @@ orocos_install_headers( fbsched-component.hpp ) # ...you may add multiple header
 # Be aware that a plugin may only have the loadRTTPlugin() function once defined in a .cpp file.
 # This function is defined by the plugin and service CPP macros.
 #
-orocos_plugin(fbsched-plugin fbsched-plugin.cpp) # ...only one plugin function per library !
+# orocos_plugin(fbsched-plugin fbsched-plugin.cpp) # ...only one plugin function per library !
 #
 # You may add multiple orocos_plugin statements.
 
@@ -74,7 +74,7 @@ orocos_plugin(fbsched-plugin fbsched-plugin.cpp) # ...only one plugin function p
 # Creates a plugin library libfbsched-service-<target>.so
 # and installs in the directory lib/orocos/fbsched/plugins/
 #
-orocos_service(fbsched-service fbsched-service.cpp) # ...only one service per library !
+# orocos_service(fbsched-service fbsched-service.cpp) # ...only one service per library !
 #
 # You may add multiple orocos_service statements.
 
@@ -96,7 +96,7 @@ orocos_typegen_headers(fbsched-types.hpp) # ...you may add multiple header files
 # Creates a library libsupport-<target>.so and installs it in
 # lib/
 #
-orocos_library(support support.cpp) # ...you may add multiple source files
+# orocos_library(support support.cpp) # ...you may add multiple source files
 #
 # You may add multiple orocos_library statements.
 
