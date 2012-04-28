@@ -6,8 +6,10 @@
 
 #include "fbsched.hpp"
 #include <rtt/Component.hpp>
+#include <iostream>
 
 using namespace RTT;
+using namespace std;
 
 // helper
 bool contains(std::vector<std::string> &sv, const std::string &s)
@@ -26,6 +28,8 @@ FBSched::FBSched(std::string const& name)
 	this->addProperty("sched_order", sched_order).doc("Partial order in which peers are executed. Unmentioned peers come last.");
 
 	this->addEventPort("trigger", trigger).doc("Event port for triggering a function block update cycle. Value is ignored.");
+
+	this->addOperation("displaySchedList", &FBSched::displaySchedList, this, OwnThread).doc("Display the current list of scheduled components. This is for debug purposes");
 }
 
 bool FBSched::startHook()
@@ -101,10 +105,24 @@ void FBSched::cleanupHook()
 	sched_list.clear();
 }
 
+void FBSched::displaySchedList()
+{
+	if( isRunning() ) {
+		cout << endl;
+		cout << "The current order of scheduling is : "<< endl;
+		for(unsigned int i=0; i<sched_list.size(); i++) {
+			cout << sched_list[i]->getName() << endl;
+		}
+		cout << endl;
+	} else {
+		cout << endl;
+		cout << "FBSched component must be running to provide a sched_list"<< endl;
+		cout << endl;
+	}
+}
 
-ORO_CREATE_COMPONENT(FBSched)
-
-
+ORO_CREATE_COMPONENT_LIBRARY()
+ORO_LIST_COMPONENT_TYPE( FBSched )
 
 /**************************************************************************
  *  You may redistribute this software and/or modify it under either the  *

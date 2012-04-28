@@ -8,19 +8,19 @@
 #define OROCOS_FBSCHED_COMPONENT_HPP
 
 #include <rtt/RTT.hpp>
-#include <iostream>
 
 class FBSched 
 	: public RTT::TaskContext
 {
 public:
 	FBSched(std::string const& name);
-	
-private:
+
+protected:
 	bool startHook();
 	void updateHook();
 	void cleanupHook();
-
+	void displaySchedList();
+	
 	std::vector<std::string> sched_order;
 	std::vector<RTT::TaskContext*> sched_list;
 	RTT::InputPort<int> trigger;
