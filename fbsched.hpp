@@ -9,7 +9,7 @@
 
 #include <rtt/RTT.hpp>
 
-class FBSched 
+class FBSched
 	: public RTT::TaskContext
 {
 public:
@@ -20,7 +20,7 @@ protected:
 	void updateHook();
 	void cleanupHook();
 	void displaySchedList();
-	
+
 	std::vector<std::string> sched_order;
 	std::vector<RTT::TaskContext*> sched_list;
 	RTT::InputPort<int> trigger;

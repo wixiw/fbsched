@@ -70,14 +70,14 @@ bool FBSched::startHook()
 	}
 
 	/* everythink Ok! */
-	Logger::log(Logger::Info) << "FBSched: running " << sched_list.size() 
+	Logger::log(Logger::Info) << "FBSched: running " << sched_list.size()
 				  << " peers in the following order:";
-	
+
 	for(unsigned int i=0; i<sched_list.size(); i++)
 		Logger::log(Logger::Info) << " " << sched_list[i]->getName();
 
 	Logger::log(Logger::Info) << endlog();
-		
+
 	return true;
 
  out_fail:
