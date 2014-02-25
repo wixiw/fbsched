@@ -1,0 +1,17 @@
+<package>
+    <name>fbsched</name>
+    <version>0.0.1</version>
+    <description>
+      Orocos Function Block Scheduler
+
+      A simple in-thread serialized scheduler for algorithmic function
+      blocks represented as RTT components
+    </description>
+    <license>dual LGPL/BSD</license>
+    <maintainer email="markus.klotzbuecher@mech.kuleuven.be">Markus Klotzbuecher</maintainer>
+
+    <buildtool_depend>catkin</buildtool_depend>
+    <build_depend>rtt</build_depend>
+    <run_depend>rtt</run_depend>
+</package>
+
