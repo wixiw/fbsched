@@ -24,7 +24,9 @@ endif()
 
 set(CMAKE_BUILD_TYPE MinSizeRel)
 
-use_orocos()
+# Set the CMAKE_PREFIX_PATH in case you're not using Orocos through ROS
+# for helping these find commands find RTT.
+find_package(OROCOS-RTT REQUIRED ${RTT_HINTS})
 
 # Defines the orocos_* cmake macros. See that file for additional
 # documentation.
