@@ -16,9 +16,27 @@ project(fbsched)
 #
 set (ROS_ROOT $ENV{ROS_ROOT} )
 if (ROS_ROOT)
+
+  #Find and setup catkin build options :
   find_package(catkin REQUIRED)
   include_directories(${catkin_INCLUDE_DIRS})  
   include_directories(${USE_OROCOS_INCLUDE_DIRS})
+  
+  #Configure catkin dependency system
+  catkin_package(
+    INCLUDE_DIRS src
+    LIBRARIES fbsched
+    CATKIN_DEPENDS rtt
+  )
+
+  #Configure catkin installation phase :
+  install(DIRECTORY src
+     DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+     FILES_MATCHING PATTERN "*.hpp"
+     PATTERN ".svn" EXCLUDE
+  )
+
+  #Help find_package to find RTT :
   set( RTT_HINTS HINTS ${rtt_PACKAGE_PATH}/install )
 endif()
 
@@ -31,18 +49,6 @@ find_package(OROCOS-RTT REQUIRED ${RTT_HINTS})
 # Defines the orocos_* cmake macros. See that file for additional
 # documentation.
 include(${OROCOS-RTT_USE_FILE_PATH}/UseOROCOS-RTT.cmake)
-
-# Creates a component library libfbsched-<target>.so
-# and installs in the directory lib/orocos/fbsched/
-#
-orocos_component(fbsched fbsched.hpp fbsched.cpp)
-
-#
-# Additional headers:
-#
-# Installs in the include/orocos/fbsched/ directory
-#
-orocos_install_headers( fbsched.hpp ) 
 
 #
 # Generates and installs our package. Must be the last statement such
