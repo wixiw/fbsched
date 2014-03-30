@@ -1,6 +1,6 @@
 #
 # The find_package macro for Orocos-RTT works best with
-# cmake >= 2.8.3
+# cmake >= 2.6.3
 #
 cmake_minimum_required(VERSION 2.8.3)
 
@@ -10,50 +10,32 @@ cmake_minimum_required(VERSION 2.8.3)
 #
 project(fbsched)
 
-#
-# Do setup in case of ros package, If ROS_ROOT is set, it is
-# recommended to use RTT/OCL through the ros packages.
-#
-set (ROS_ROOT $ENV{ROS_ROOT} )
-if (ROS_ROOT)
-
-  #Find and setup catkin build options :
-  find_package(catkin REQUIRED)
-  include_directories(${catkin_INCLUDE_DIRS})  
-  include_directories(${USE_OROCOS_INCLUDE_DIRS})
-  
-  #Configure catkin dependency system
-  catkin_package(
-    INCLUDE_DIRS src
-    LIBRARIES fbsched
-    CATKIN_DEPENDS rtt
-  )
-
-  #Configure catkin installation phase :
-  install(DIRECTORY src
-     DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-     FILES_MATCHING PATTERN "*.hpp"
-     PATTERN ".svn" EXCLUDE
-  )
-
-  #Help find_package to find RTT :
-  set( RTT_HINTS HINTS ${rtt_PACKAGE_PATH}/install )
-endif()
-
 set(CMAKE_BUILD_TYPE MinSizeRel)
 
-# Set the CMAKE_PREFIX_PATH in case you're not using Orocos through ROS
-# for helping these find commands find RTT.
-find_package(OROCOS-RTT REQUIRED ${RTT_HINTS})
-
-# Defines the orocos_* cmake macros. See that file for additional
-# documentation.
-include(${OROCOS-RTT_USE_FILE_PATH}/UseOROCOS-RTT.cmake)
-
-#
-# Generates and installs our package. Must be the last statement such
-# that it can pick up all above settings.
-#
-orocos_generate_package(
-  DEPENDS_TARGETS rtt
+find_package(catkin REQUIRED COMPONENTS
+ rtt_ros
 )
+
+catkin_package(
+  INCLUDE_DIRS include
+  CATKIN_DEPENDS rtt_ros
+)
+
+include_directories(
+	include/fbsched
+	${catkin_INCLUDE_DIRS})
+
+add_definitions(-DRTT_COMPONENT)
+add_definitions(${catkin_DEFINITIONS})
+
+orocos_generate_package(
+  INCLUDE_DIRS include
+  DEPENDS rtt_ros
+)
+
+orocos_install_headers(
+  DIRECTORY include/${PROJECT_NAME}/
+)
+
+# Rest of the configuration is in src/
+add_subdirectory( src )
